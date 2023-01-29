@@ -4,6 +4,7 @@ import com.example.demo3.Models.Event;
 import com.example.demo3.Models.Interest;
 import com.example.demo3.Models.SignIn;
 import com.example.demo3.Models.Users;
+import com.example.demo3.Service.EventService;
 import com.example.demo3.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class UserController {
     @Autowired
     UserService userServiceObj;
 
+    @Autowired
+    EventService eventServiceObj;
+
     @CrossOrigin
     @PostMapping(path="/registerUser") /////////Add users to the database
     public Users addUserEnc(@RequestBody Users user){
@@ -25,10 +29,10 @@ public class UserController {
     }
     @CrossOrigin
     @PostMapping("/signIn")
-    public SignIn Authenticate(@RequestBody SignIn signInDetails)
+    public Users Authenticate(@RequestBody SignIn signInDetails)
     {
-         userServiceObj.Authenticate(signInDetails);
-         return signInDetails;
+        return userServiceObj.Authenticate(signInDetails);
+
     }
 //    @CrossOrigin
 //    @PostMapping(path="/add/user")
@@ -50,7 +54,17 @@ public class UserController {
     @CrossOrigin
     @PutMapping(path = "/register/event/{userid}/{event}")
     public String RegisterEvent(@PathVariable Long userid,@PathVariable String event){
-        return userServiceObj.AddEvent(userid,event);
+        userServiceObj.AddEvent(userid,event);
+        eventServiceObj.AddUser(userid,event);
+        return "Event registered successfully";
+
+
+    }
+
+    @CrossOrigin
+    @PutMapping(path = "/add/{userid}/to/{userid1}")
+    public String RegisterEvent(@PathVariable Long userid,@PathVariable Long userid1){
+        return userServiceObj.AddFriend(userid,userid1);
     }
 
 
@@ -79,5 +93,25 @@ public class UserController {
         return userServiceObj.getInterests(userid);
 
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/search/{username}")
+    public List<Users>getUserByName(@PathVariable String username){
+        List<Users>user= userServiceObj.findByName(username);
+        return user;
+
+    }@CrossOrigin
+    @GetMapping(value = "/friends/{userid}")
+    public List<Long>getAllFriends(@PathVariable Long userid){
+        List<Long>user= userServiceObj.findFriends(userid);
+        return user;
+
+    }
+//    @CrossOrigin
+//    @GetMapping(value = "/search/last/{userLname}")
+//    public List<Users>getUserByLName(@PathVariable String userLname){
+//        List<Users>user= userServiceObj.findByLName(userLname);
+//        return user;
+//    }
 
 }

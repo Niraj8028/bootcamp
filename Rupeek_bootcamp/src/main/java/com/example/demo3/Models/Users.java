@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="users")
@@ -17,24 +18,28 @@ public class Users {
     private String firstName;
     private String lastName;
     private String email;
+    private String city;
     @NonNull
     private String pwd;
-//    @DBRef
+    //    @DBRef
     private List<String> interest;
     private List<String> regEvents;
+    private List<Long> friends;
 
-    public long getId() {
-        return id;
-    }
-
-    public Users(long id, String firstName, String lastName, String email, String pwd, List<String> interest, List<String> regEvents) {
+    public Users(long id, String firstName, String lastName, String email, String city, @NonNull String pwd, List<String> interest, List<String> regEvents, List<Long> friends) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.pwd=pwd;
+        this.city = city;
+        this.pwd = pwd;
         this.interest = interest;
         this.regEvents = regEvents;
+        this.friends = friends;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void setId(long id) {
@@ -64,13 +69,24 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @NonNull
     public String getPwd() {
         return pwd;
     }
 
-    public void setPwd(String pwd) {
+    public void setPwd(@NonNull String pwd) {
         this.pwd = pwd;
     }
+
     public List<String> getInterest() {
         return interest;
     }
@@ -85,5 +101,13 @@ public class Users {
 
     public void setRegEvents(List<String> regEvents) {
         this.regEvents = regEvents;
+    }
+
+    public List<Long> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<Long> friends) {
+        this.friends = friends;
     }
 }

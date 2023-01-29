@@ -77,25 +77,26 @@ public class UserService {
         //System.out.println("Encrypted password using MD5: " + encryptedpassword);
         return encryptedpassword;
     }
-    public String Authenticate(SignIn signInDetails) {
+    public Users Authenticate(SignIn signInDetails) {
         String password = signInDetails.getPassword(); // take from signin
         String email = signInDetails.getEmail(); // take from signin
         String user_password = FindUserByEmail(email);// check email and take password from database
 //        Users user=userRepoObj.findByEmail(email);
 //        Users user=findByEmail(email);
         //System.out.println("Encrypted from db:"+ user_password);
+        List<Users> user=userRepoObj.findByEmail(email);
 
         if (!user_password.equals("null"))/// check if the password came from login api is same with our database
         {
-
+            Users u=user.get(0);
             String encryptedpassword = PasswordEncryption(password);// encrypt the password from  signin
             //System.out.println("Hii 2 Encrypted from db:"+ encryptedpassword);
             if (encryptedpassword.equals(user_password)) {
 
-                return email;
+                return u;
             }
         }
-        return "Login failed";
+        return null;
     }
 
 //    }  public Users Authenticate(SignIn signInDetails)
@@ -184,28 +185,33 @@ public class UserService {
         return "interest added successfully";
     }
 
-    public String AddEvent(Long userid, String event) {
+    public void  AddEvent(Long userid, String event) {
         Optional<Users> user=userRepoObj.findById(userid);
-        if(user.isPresent()){
-            Users users=user.get();
-            List<String> list=users.getRegEvents();
-            if (list!=null){
-                System.out.println("True here 1");
+        List<Event> events=eventrepoobj.findByName(event);
+        System.out.println("events");
+
+        if(user.isPresent()) {
+            Users users = user.get();
+            Event event1 = events.get(0);
+            String name = users.getFirstName();
+            List<String> list = users.getRegEvents();
+            List<String> u = event1.getUsers();
+
+            if (list == null) {
+
+                List<String> u1 = new ArrayList<>();
+                u1.add(event);
+                users.setRegEvents(u1);
+
+            } else {
                 list.add(event);
+//
                 users.setRegEvents(list);
-                userRepoObj.save(users);
 
             }
-            else {
-                System.out.println("True here 2");
-                List<String> list1=new ArrayList<>();
-                list1.add(event);
-                users.setRegEvents(list1);
-                System.out.println(users.getRegEvents());
-                userRepoObj.save(users);
-            }
+            userRepoObj.save(users);
         }
-        return "event registered successfully";
+
     }
 
     public List<Event> getRegEvents(Long userid) {
@@ -216,14 +222,27 @@ public class UserService {
             List<String> regievents = users.getRegEvents();
             if (regievents != null) {
                 for (String i : regievents) {
-                    Event event=eventrepoobj.findByName(i);
-                    if (event!=null){
-                        events.add(event);
+                    List<Event>event=eventrepoobj.findByName(i);
+                    Event event1=event.get(0);
+                    if (event1!=null){
+                        events.add(event1);
                     }
                 }
             }
         }
         return events;
+    }
+
+    public List<Long> findFriends(Long userid) {
+        Optional<Users> user=userRepoObj.findById(userid);
+
+
+            Users users=user.get();
+            List<Long>friend=users.getFriends();
+            return friend;
+
+
+
     }
 
     public List<Interest> getInterests(Long userid) {
@@ -244,4 +263,53 @@ public class UserService {
         }
         return interests;
     }
+
+    public String AddFriend(Long userid, Long userid1) {
+        Users user1= userRepoObj.findById((userid)).get();
+        Users user2= userRepoObj.findById((userid1)).get();
+
+        List<Long>list1=user1.getFriends();
+        List<Long>list2=user2.getFriends();
+
+        if(list1!=null){
+            list1.add(userid1);
+            user1.setFriends(list1);
+
+        }
+        else{
+            list1=new ArrayList<>();
+            list1.add(userid1);
+            user1.setFriends(list1);
+        }
+
+        if(list2!=null){
+            list2.add(userid);
+            user2.setFriends(list2);
+
+        }
+        else{
+            list2=new ArrayList<>();
+            list2.add(userid);
+            user2.setFriends(list2);
+        }
+        userRepoObj.save(user2);
+        userRepoObj.save(user1);
+
+
+
+        return "friend added succesfully";
+
+
+    }
+
+    public List<Users> findByName(String username) {
+        return userRepoObj.findUserByName(username);
+    }
+
+    public List<Users> findByLName(String username) {
+        return userRepoObj.findUserByLName(username);
+
+    }
+
+
 }

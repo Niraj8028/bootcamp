@@ -6,8 +6,17 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepo extends MongoRepository<Users,Long> {
-//    @Query("{email : ?0}")
-//    Users findByEmail(String email);
+    @Query("{firstName : ?0}")
+    List<Users> findUserByName(String firstName);
+
+    @Query("{lastName : ?1}")
+    List<Users> findUserByLName(String lastName);
+
+    @Query("{email : ?0}")
+    List<Users> findByEmail(String email);
+
 }

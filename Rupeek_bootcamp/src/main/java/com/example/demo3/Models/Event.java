@@ -5,6 +5,7 @@ import jakarta.persistence.GenerationType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="Events")
@@ -15,13 +16,26 @@ public class Event {
     private String eventName;
     private String city;
     private String Date;
-    private List<String> interest;
+    private List<String> interest=new ArrayList<>();
+    private List<String> users;
 
-    public Event(String eventName, String city, String Date, List<String> interest) {
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventName='" + eventName + '\'' +
+                ", city='" + city + '\'' +
+                ", Date='" + Date + '\'' +
+                ", interest=" + interest +
+                ", users=" + users +
+                '}';
+    }
+
+    public Event(String eventName, String city, String Date, List<String> interest, List<String> users) {
         this.eventName = eventName;
         this.city = city;
         this.Date = Date;
         this.interest = interest;
+        this.users = users;
     }
 
     public String getEventName() {
@@ -44,8 +58,8 @@ public class Event {
         return Date;
     }
 
-    public void setDate(String Date) {
-        Date = Date;
+    public void setDate(String date) {
+        this.Date = date;
     }
 
     public List<String> getInterest() {
@@ -54,5 +68,13 @@ public class Event {
 
     public void setInterest(List<String> interest) {
         this.interest = interest;
+    }
+
+    public List<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<String> users) {
+        this.users = users;
     }
 }
