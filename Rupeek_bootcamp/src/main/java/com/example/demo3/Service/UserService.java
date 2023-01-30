@@ -217,33 +217,49 @@ public class UserService {
     public List<Event> getRegEvents(Long userid) {
         Optional<Users> user=userRepoObj.findById(userid);
         List<Event> events=new ArrayList<>();
-        if(user.isPresent()) {
-            Users users = user.get();
-            List<String> regievents = users.getRegEvents();
+        Users users = user.get();
+        List<Long> regievents = users.getEvents();
+
+
             if (regievents != null) {
-                for (String i : regievents) {
-                    List<Event>event=eventrepoobj.findByName(i);
-                    Event event1=event.get(0);
-                    if (event1!=null){
+                for (Long i : regievents) {
+                    Optional<Event> event=eventrepoobj.findById(i);
+                    Event event1=event.get();
+
                         events.add(event1);
-                    }
+
                 }
             }
-        }
+
         return events;
     }
 
-    public List<Long> findFriends(Long userid) {
+    public List<Users> findFriends(Long userid) {
         Optional<Users> user=userRepoObj.findById(userid);
+        List<Users>friend=new ArrayList<>();
+        Users users=user.get();
+        List<Long>f=users.getFriends();
+        if(f!=null){
+            for(Long i:f){
+                Optional<Users> u=userRepoObj.findById(i);
+                Users temp=u.get();
+                friend.add(temp);
 
-
-            Users users=user.get();
-            List<Long>friend=users.getFriends();
-            return friend;
-
-
-
+            }
+        }
+        return friend;
     }
+//    public List<Long> findFriends(Long userid) {
+//        Optional<Users> user=userRepoObj.findById(userid);
+//
+//
+//            Users users=user.get();
+//            List<Long>friend=users.getFriends();
+//            return friend;
+//
+//
+//
+//    }
 
     public List<Interest> getInterests(Long userid) {
         Optional<Users>user= userRepoObj.findById((userid));
@@ -312,4 +328,23 @@ public class UserService {
     }
 
 
+    public void register(Long userid, Long eventid) {
+        Optional<Users> user=userRepoObj.findById(userid);
+        Optional<Event> event=eventrepoobj.findById(eventid);
+
+        Users u=user.get();
+        List<Long>e=u.getEvents();
+        if(e!=null){
+            e.add(eventid);
+            u.setEvents(e);
+        }
+        else{
+            List<Long>e1=new ArrayList<>();
+            e1.add(eventid);
+            u.setEvents(e1);
+
+        }
+        userRepoObj.save(u);
+
+    }
 }

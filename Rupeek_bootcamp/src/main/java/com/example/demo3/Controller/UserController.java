@@ -55,7 +55,16 @@ public class UserController {
     @PutMapping(path = "/register/event/{userid}/{event}")
     public String RegisterEvent(@PathVariable Long userid,@PathVariable String event){
         userServiceObj.AddEvent(userid,event);
-        eventServiceObj.AddUser(userid,event);
+//        eventServiceObj.AddUser(userid,event);
+        return "Event registered successfully";
+
+
+    }
+    @CrossOrigin
+    @PutMapping(path = "/register/event/{userid}/to/{eventid}")
+    public String RegisterToEvent(@PathVariable Long userid,@PathVariable Long eventid){
+        userServiceObj.register(userid,eventid);
+//        eventServiceObj.AddUser(userid,event);
         return "Event registered successfully";
 
 
@@ -65,6 +74,7 @@ public class UserController {
     @PutMapping(path = "/add/{userid}/to/{userid1}")
     public String RegisterEvent(@PathVariable Long userid,@PathVariable Long userid1){
         return userServiceObj.AddFriend(userid,userid1);
+
     }
 
 
@@ -102,9 +112,9 @@ public class UserController {
 
     }@CrossOrigin
     @GetMapping(value = "/friends/{userid}")
-    public List<Long>getAllFriends(@PathVariable Long userid){
-        List<Long>user= userServiceObj.findFriends(userid);
-        return user;
+    public List<Users>getAllFriends(@PathVariable Long userid){
+        return userServiceObj.findFriends(userid);
+
 
     }
 //    @CrossOrigin

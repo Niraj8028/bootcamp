@@ -12,7 +12,7 @@ import java.util.List;
 public class Event {
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     //@Id
-    //private long event_id;
+    private long event_id;
     private String eventName;
     private String city;
     private String Date;
@@ -30,12 +30,21 @@ public class Event {
                 '}';
     }
 
-    public Event(String eventName, String city, String Date, List<String> interest, List<String> users) {
+    public Event(long event_id, String eventName, String city, String Date, List<String> interest, List<String> users) {
+        this.event_id = event_id;
         this.eventName = eventName;
         this.city = city;
         this.Date = Date;
         this.interest = interest;
         this.users = users;
+    }
+
+    public long getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(long event_id) {
+        this.event_id = event_id;
     }
 
     public String getEventName() {

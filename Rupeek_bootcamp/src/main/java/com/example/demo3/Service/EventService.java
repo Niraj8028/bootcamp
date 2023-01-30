@@ -27,9 +27,22 @@ public class EventService {
 
 
 
-    public void addevent(Event event) {
-//        System.out.println(event.toString());
+//    public void addevent(Event event) {
+////        System.out.println(event.toString());
+//        eventrepoObj.save(event);
+//    }
+
+    Long random_id = 1070L;
+    public Event addevent(Event event) {
+
+        //user.setId();
+
+        random_id++;
+        //System.out.println(random_id);
+        event.setEvent_id(random_id);
+
         eventrepoObj.save(event);
+        return event;
     }
 
     public List<Event> getEvent() {

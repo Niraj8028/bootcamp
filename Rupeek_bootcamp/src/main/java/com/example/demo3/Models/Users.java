@@ -24,9 +24,14 @@ public class Users {
     //    @DBRef
     private List<String> interest;
     private List<String> regEvents;
-    private List<Long> friends;
 
-    public Users(long id, String firstName, String lastName, String email, String city, @NonNull String pwd, List<String> interest, List<String> regEvents, List<Long> friends) {
+
+
+    private List<Long> friends;
+    private List<Long> events;
+
+
+    public Users(long id, String firstName, String lastName, String email, String city, @NonNull String pwd, List<String> interest, List<String> regEvents, List<Long> friends, List<Long> events) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,6 +41,7 @@ public class Users {
         this.interest = interest;
         this.regEvents = regEvents;
         this.friends = friends;
+        this.events = events;
     }
 
     public long getId() {
@@ -101,6 +107,13 @@ public class Users {
 
     public void setRegEvents(List<String> regEvents) {
         this.regEvents = regEvents;
+    }
+    public List<Long> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Long> events) {
+        this.events = events;
     }
 
     public List<Long> getFriends() {

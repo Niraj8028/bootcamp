@@ -18,9 +18,9 @@ public class EventController {
 
     @CrossOrigin
     @PostMapping(value = "/add/event")
-    public String addEvent(@RequestBody Event event){
-        eventServiceObj.addevent(event);
-        return "Event added succesfully";
+    public Event addEvent(@RequestBody Event event){
+       return eventServiceObj.addevent(event);
+
     }
 
     @CrossOrigin

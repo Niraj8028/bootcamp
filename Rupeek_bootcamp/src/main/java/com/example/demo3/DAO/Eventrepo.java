@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface Eventrepo extends MongoRepository<Event, ObjectId> {
+public interface Eventrepo extends MongoRepository<Event, Long> {
 
     @Query("{city : ?0}")
     List<Event> findByCityName(String city);
