@@ -334,6 +334,7 @@ public class UserService {
 
         Users u=user.get();
         List<Long>e=u.getEvents();
+
         if(e!=null){
             e.add(eventid);
             u.setEvents(e);
